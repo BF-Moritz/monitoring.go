@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package monitoring;
+
+option go_package = "github.com/BF-Moritz/monitoring.go/api";
+
+message Ping {
+    uint64 id = 1;
+    string body = 2;
+}
+
+message Pong {
+    uint64 id = 1;
+}
+
+service ChatService{
+    rpc SayHello(Ping) returns (Pong) {}
+}
