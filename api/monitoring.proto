@@ -6,7 +6,8 @@ option go_package = "github.com/BF-Moritz/monitoring.go/api";
 
 message Ping {
     uint64 id = 1;
-    string body = 2;
+    string client = 2;
+    string body = 3;
 }
 
 message Pong {
