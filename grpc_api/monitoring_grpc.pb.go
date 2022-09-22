@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.6.1
-// source: api/monitoring.proto
+// source: grpc_api/monitoring.proto
 
-package api
+package grpc_api
 
 import (
 	context "context"
@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ChatServiceClient interface {
-	SayHello(ctx context.Context, in *Ping, opts ...grpc.CallOption) (*Pong, error)
+	SendStatus(ctx context.Context, in *Ping, opts ...grpc.CallOption) (*Pong, error)
 }
 
 type chatServiceClient struct {
@@ -33,9 +33,9 @@ func NewChatServiceClient(cc grpc.ClientConnInterface) ChatServiceClient {
 	return &chatServiceClient{cc}
 }
 
-func (c *chatServiceClient) SayHello(ctx context.Context, in *Ping, opts ...grpc.CallOption) (*Pong, error) {
+func (c *chatServiceClient) SendStatus(ctx context.Context, in *Ping, opts ...grpc.CallOption) (*Pong, error) {
 	out := new(Pong)
-	err := c.cc.Invoke(ctx, "/monitoring.ChatService/SayHello", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/monitoring.ChatService/SendStatus", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (c *chatServiceClient) SayHello(ctx context.Context, in *Ping, opts ...grpc
 // All implementations must embed UnimplementedChatServiceServer
 // for forward compatibility
 type ChatServiceServer interface {
-	SayHello(context.Context, *Ping) (*Pong, error)
+	SendStatus(context.Context, *Ping) (*Pong, error)
 	mustEmbedUnimplementedChatServiceServer()
 }
 
@@ -54,8 +54,8 @@ type ChatServiceServer interface {
 type UnimplementedChatServiceServer struct {
 }
 
-func (UnimplementedChatServiceServer) SayHello(context.Context, *Ping) (*Pong, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
+func (UnimplementedChatServiceServer) SendStatus(context.Context, *Ping) (*Pong, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendStatus not implemented")
 }
 func (UnimplementedChatServiceServer) mustEmbedUnimplementedChatServiceServer() {}
 
@@ -70,20 +70,20 @@ func RegisterChatServiceServer(s grpc.ServiceRegistrar, srv ChatServiceServer) {
 	s.RegisterService(&ChatService_ServiceDesc, srv)
 }
 
-func _ChatService_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ChatService_SendStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Ping)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ChatServiceServer).SayHello(ctx, in)
+		return srv.(ChatServiceServer).SendStatus(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/monitoring.ChatService/SayHello",
+		FullMethod: "/monitoring.ChatService/SendStatus",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChatServiceServer).SayHello(ctx, req.(*Ping))
+		return srv.(ChatServiceServer).SendStatus(ctx, req.(*Ping))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -96,10 +96,10 @@ var ChatService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ChatServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SayHello",
-			Handler:    _ChatService_SayHello_Handler,
+			MethodName: "SendStatus",
+			Handler:    _ChatService_SendStatus_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/monitoring.proto",
+	Metadata: "grpc_api/monitoring.proto",
 }

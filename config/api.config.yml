@@ -1,0 +1,5 @@
+port: 6969 # port where the REST API listenes
+influx:
+    url: 'http://localhost:8086' # influxDB url
+    apikey: '' # influxDB API_KEY
+    org: '' # influxDB organization

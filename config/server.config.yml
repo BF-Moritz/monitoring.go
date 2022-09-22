@@ -1,0 +1,5 @@
+port: 9000 # port on wich the grpc server is listening
+influx:
+    url: 'http://localhost:8086' # influxDB url
+    apikey: '' # influxDB API_KEY
+    org: '' # influxDB organization

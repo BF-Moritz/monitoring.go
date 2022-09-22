@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package monitoring;
+
+option go_package = "github.com/BF-Moritz/monitoring.go/grpc_api";
+
+message Ping {
+    uint64 id = 1;
+    string client = 2;
+    StatsType body = 3;
+    string timeStamp = 4; 
+}
+
+message StatsType {
+	MemoryStats Memory = 1;
+	CpuStats CPU = 2;
+}
+
+message MemoryStats {
+	uint64 Total = 1;  
+	float Used = 2;
+	float Cached = 3;
+	float Free = 4;
+}
+
+message CpuStats {
+	float Usage = 1;
+}
+
+message Pong {
+    uint64 id = 1;
+}
+
+service ChatService{
+    rpc SendStatus(Ping) returns (Pong) {}
+}
